@@ -3,11 +3,12 @@
 import { useState } from 'react';
 import { AppShell } from '@/components/AppShell';
 import { GroupListItem } from '@/components/GroupListItem';
-import { SAMPLE_GROUPS } from '@/lib/constants';
+import { useGroups, useData } from '@/lib/hooks/useData';
 import { Group } from '@/lib/types';
 
 export default function HomePage() {
-  const [groups] = useState<Group[]>(SAMPLE_GROUPS);
+  const groups = useGroups();
+  const { getGroupBalances } = useData();
   const [activeTab, setActiveTab] = useState<'trips' | 'dashboard' | 'friends'>('trips');
 
   const handleGroupClick = (groupId: string) => {
@@ -92,37 +93,80 @@ export default function HomePage() {
 
       {activeTab === 'dashboard' && (
         <div className="space-y-6">
-          <div className="text-center">
-            <h2 className="text-2xl font-bold text-textPrimary mb-2">$40.20</h2>
-            <p className="text-textSecondary">Total you owe</p>
-          </div>
-          
-          <div className="grid grid-cols-2 gap-4">
-            <div className="card text-center">
-              <div className="text-lg font-semibold text-green-600 mb-1">$125.80</div>
-              <div className="text-sm text-textSecondary">You're owed</div>
-            </div>
-            <div className="card text-center">
-              <div className="text-lg font-semibold text-red-600 mb-1">$166.00</div>
-              <div className="text-sm text-textSecondary">You owe</div>
-            </div>
-          </div>
+          {(() => {
+            // Calculate total balances across all groups
+            let totalOwed = 0;
+            let totalOwe = 0;
 
-          <div>
-            <h3 className="font-semibold text-textPrimary mb-3">Recent Activity</h3>
-            <div className="space-y-3">
-              <div className="flex items-center space-x-3 p-3 bg-surface rounded-lg">
-                <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
-                  <span className="text-white text-xs font-semibold">A</span>
+            groups.forEach(group => {
+              const balances = getGroupBalances(group.groupId);
+              balances.forEach(balance => {
+                if (balance.amount > 0) {
+                  totalOwed += balance.amount;
+                } else if (balance.amount < 0) {
+                  totalOwe += Math.abs(balance.amount);
+                }
+              });
+            });
+
+            return (
+              <>
+                <div className="text-center">
+                  <h2 className="text-2xl font-bold text-textPrimary mb-2">
+                    ${Math.abs(totalOwe - totalOwed).toFixed(2)}
+                  </h2>
+                  <p className="text-textSecondary">
+                    {totalOwe > totalOwed ? 'Total you owe' : 'Total you\'re owed'}
+                  </p>
                 </div>
-                <div className="flex-1">
-                  <p className="text-sm font-medium">Alice added "Dinner at Sushi Restaurant"</p>
-                  <p className="text-xs text-textSecondary">Tokyo Adventure • 2 hours ago</p>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="card text-center">
+                    <div className="text-lg font-semibold text-green-600 mb-1">
+                      ${totalOwed.toFixed(2)}
+                    </div>
+                    <div className="text-sm text-textSecondary">You're owed</div>
+                  </div>
+                  <div className="card text-center">
+                    <div className="text-lg font-semibold text-red-600 mb-1">
+                      ${totalOwe.toFixed(2)}
+                    </div>
+                    <div className="text-sm text-textSecondary">You owe</div>
+                  </div>
                 </div>
-                <div className="text-sm font-medium text-red-600">-$60.00</div>
-              </div>
-            </div>
-          </div>
+
+                <div>
+                  <h3 className="font-semibold text-textPrimary mb-3">Recent Activity</h3>
+                  <div className="space-y-3">
+                    {groups.length === 0 ? (
+                      <p className="text-textSecondary text-center py-4">No recent activity</p>
+                    ) : (
+                      groups.slice(0, 3).map(group => (
+                        <div key={group.groupId} className="flex items-center space-x-3 p-3 bg-surface rounded-lg">
+                          <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
+                            <span className="text-white text-xs font-semibold">
+                              {group.groupName.charAt(0).toUpperCase()}
+                            </span>
+                          </div>
+                          <div className="flex-1">
+                            <p className="text-sm font-medium">{group.groupName}</p>
+                            <p className="text-xs text-textSecondary">
+                              {group.tripDestination} • ${group.totalExpenses.toFixed(2)} total
+                            </p>
+                          </div>
+                          <div className={`text-sm font-medium ${
+                            group.userBalance >= 0 ? 'text-green-600' : 'text-red-600'
+                          }`}>
+                            {group.userBalance >= 0 ? '+' : ''}${group.userBalance.toFixed(2)}
+                          </div>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                </div>
+              </>
+            );
+          })()}
         </div>
       )}
 

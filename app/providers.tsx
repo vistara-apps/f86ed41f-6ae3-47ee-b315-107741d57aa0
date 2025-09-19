@@ -3,6 +3,7 @@
 import { MiniKitProvider } from '@coinbase/minikit';
 import { OnchainKitProvider } from '@coinbase/onchainkit';
 import { base } from 'wagmi/chains';
+import { DataProvider } from '@/lib/data-context';
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
@@ -14,7 +15,9 @@ export function Providers({ children }: { children: React.ReactNode }) {
         apiKey={process.env.NEXT_PUBLIC_ONCHAINKIT_API_KEY || ''}
         chain={base}
       >
-        {children}
+        <DataProvider>
+          {children}
+        </DataProvider>
       </OnchainKitProvider>
     </MiniKitProvider>
   );
