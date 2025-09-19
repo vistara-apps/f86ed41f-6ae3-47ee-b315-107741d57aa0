@@ -1,0 +1,30 @@
+{
+  "accountAssociation": {
+    "header": "",
+    "payload": "",
+    "signature": ""
+  },
+  "frame": {
+    "version": "1",
+    "name": "TripSplitter",
+    "subtitle": "Built with Zara",
+    "description": "TripSplitter is a Base Mini App built with Zara.",
+    "iconUrl": "https://0co.to/images/zara-2.png",
+    "homeUrl": "https://f86ed41f6ae347eeb315107741d57aa0-wz65.vercel.app",
+    "splashImageUrl": "https://f86ed41f6ae347eeb315107741d57aa0-wz65.vercel.app/splash.png",
+    "splashBackgroundColor": "#000000",
+    "heroImageUrl": "https://f86ed41f6ae347eeb315107741d57aa0-wz65.vercel.app/image.png",
+    "tagline": "TripSplitter",
+    "screenshotUrls": [
+      "https://f86ed41f6ae347eeb315107741d57aa0-wz65.vercel.app/screenshot.png",
+      "https://f86ed41f6ae347eeb315107741d57aa0-wz65.vercel.app/screenshot.png"
+    ],
+    "primaryCategory": "social",
+    "tags": [
+      "base",
+      "miniapp",
+      "onchainkit"
+    ],
+    "webhookUrl": "https://f86ed41f6ae347eeb315107741d57aa0-wz65.vercel.app/api/webhook"
+  }
+}
