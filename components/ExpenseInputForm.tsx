@@ -27,7 +27,7 @@ export function ExpenseInputForm({
   const [description, setDescription] = useState('');
   const [amount, setAmount] = useState('');
   const [paidById, setPaidById] = useState(members[0]?.userId || '');
-  const [category, setCategory] = useState(EXPENSE_CATEGORIES[0]);
+  const [category, setCategory] = useState<typeof EXPENSE_CATEGORIES[number]>(EXPENSE_CATEGORIES[0]);
   const [allocationType, setAllocationType] = useState<'equal' | 'custom'>('equal');
   const [customAllocations, setCustomAllocations] = useState<{ [userId: string]: string }>({});
 
@@ -139,7 +139,7 @@ export function ExpenseInputForm({
               </label>
               <select
                 value={category}
-                onChange={(e) => setCategory(e.target.value)}
+                onChange={(e) => setCategory(e.target.value as typeof EXPENSE_CATEGORIES[number])}
                 className="input-field"
               >
                 {EXPENSE_CATEGORIES.map(cat => (

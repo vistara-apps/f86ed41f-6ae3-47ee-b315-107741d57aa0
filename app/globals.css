@@ -3,12 +3,22 @@
 @tailwind utilities;
 
 :root {
+  --background: hsl(240, 4%, 95%);
+  --foreground: hsl(240, 4%, 15%);
   --bg: hsl(240, 4%, 95%);
   --accent: hsl(180, 77%, 52%);
   --primary: hsl(263, 69%, 59%);
   --surface: hsl(0, 0%, 100%);
   --text-primary: hsl(240, 4%, 15%);
   --text-secondary: hsl(240, 4%, 45%);
+  --muted: hsl(240, 4%, 96%);
+  --muted-foreground: hsl(240, 4%, 45%);
+  --destructive: hsl(0, 84%, 60%);
+  --destructive-foreground: hsl(0, 0%, 100%);
+  --border: hsl(240, 4%, 90%);
+  --input: hsl(240, 4%, 90%);
+  --ring: hsl(263, 69%, 59%);
+  --radius: 10px;
 }
 
 * {
@@ -43,7 +53,7 @@ body {
   }
   
   .card {
-    @apply bg-surface rounded-lg shadow-card p-lg;
+    @apply bg-surface rounded-lg shadow-lg p-6;
   }
   
   .input-field {
